@@ -42,7 +42,7 @@
             const graph = {};
 
             async function loadGeoJSON() {
-                const response = await fetch('incheon_roads.json');
+                const response = await fetch('incheon_roads.geojson');
                 const data = await response.json();
                 console.log("GeoJSON Data:", data);
                 data.features.forEach(feature => {
@@ -113,8 +113,14 @@
                 const startInput = document.getElementById('start').value.split(',');
                 const endInput = document.getElementById('end').value.split(',');
 
-                const start = startInput.toString();
-                const end = endInput.toString();
+                // 좌표를 배열로 처리
+                const start = startInput[0] + ',' + startInput[1];
+                const end = endInput[0] + ',' + endInput[1];
+
+                if (!graph[start] || !graph[end]) {
+                    alert("출발지 또는 목적지가 도로 네트워크에 없습니다.");
+                    return;
+                }
 
                 if (startMarker) map.removeLayer(startMarker);
                 if (endMarker) map.removeLayer(endMarker);
@@ -122,11 +128,6 @@
 
                 startMarker = L.marker([parseFloat(startInput[0]), parseFloat(startInput[1])]).addTo(map).bindPopup("출발지");
                 endMarker = L.marker([parseFloat(endInput[0]), parseFloat(endInput[1])]).addTo(map).bindPopup("목적지");
-
-                if (!graph[start] || !graph[end]) {
-                    alert("출발지 또는 목적지가 도로 네트워크에 없습니다.");
-                    return;
-                }
 
                 const path = aStarSearch(graph, start, end);
                 if (path) {
