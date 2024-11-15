@@ -24,9 +24,9 @@
     <div id="controls">
         <h3>길찾기 시스템</h3>
         <label for="start">출발지:</label>
-        <input id="start" type="text" placeholder="위도,경도">
+        <input id="start" type="text" value="37.504333, 126.695104" placeholder="위도,경도">
         <label for="end">목적지:</label>
-        <input id="end" type="text" placeholder="위도,경도">
+        <input id="end" type="text" value="37.456375, 126.705678" placeholder="위도,경도">
         <button id="findRoute">경로 찾기</button>
         <button id="reset">초기화</button>
     </div>
@@ -105,15 +105,14 @@
             }
 
             function predictTime(distance) {
-                const speed = 40;
-                return (distance / speed) * 60;
+                const speed = 40; // km/h
+                return (distance / speed) * 60; // minutes
             }
 
             document.getElementById('findRoute').addEventListener('click', async () => {
                 const startInput = document.getElementById('start').value.split(',');
                 const endInput = document.getElementById('end').value.split(',');
 
-                // 좌표를 배열로 처리
                 const start = startInput[0] + ',' + startInput[1];
                 const end = endInput[0] + ',' + endInput[1];
 
